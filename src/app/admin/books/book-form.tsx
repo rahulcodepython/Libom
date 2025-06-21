@@ -62,7 +62,7 @@ const BookForm = ({
                     edit ? <Button variant="outline" size="sm">
                         <Edit className="h-4 w-4" />
                     </Button> : <Button>
-                        <Plus className="h-4 w-4 mr-2" />
+                        <Plus className="h-4 w-4" />
                         Add Book
                     </Button>
                 }
