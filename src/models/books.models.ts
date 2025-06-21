@@ -1,4 +1,4 @@
-import mongoose, { Document, Schema } from 'mongoose';
+import mongoose, { Document, models, Schema } from 'mongoose';
 
 // Define the Book interface
 export interface IBook extends Document {
@@ -22,4 +22,4 @@ const BookSchema: Schema = new Schema({
     totalNumber: { type: Number, required: true, min: 0 },
 });
 
-export const Book = mongoose.model<IBook>('Book', BookSchema);
+export const Book = models.Book || mongoose.model<IBook>('Book', BookSchema);

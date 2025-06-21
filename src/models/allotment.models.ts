@@ -1,4 +1,4 @@
-import mongoose, { Document, Schema } from 'mongoose';
+import { Document, model, models, Schema } from 'mongoose';
 
 interface IAllotment extends Document {
     userId: string;
@@ -24,4 +24,4 @@ const AllotmentSchema: Schema = new Schema({
     isReturned: { type: Boolean, required: true, default: false },
 });
 
-export const Allotment = mongoose.model<IAllotment>('Allotment', AllotmentSchema);
+export const Allotment = models.Allotment || model<IAllotment>('Allotment', AllotmentSchema);

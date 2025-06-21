@@ -1,4 +1,4 @@
-import mongoose, { Schema } from 'mongoose';
+import mongoose, { models, Schema } from 'mongoose';
 
 interface IStats extends Document {
     booksBorrowedToday: number;
@@ -24,4 +24,4 @@ const StatsSchema = new Schema({
     createdAt: { type: Date, default: Date.now },
 });
 
-export const Stats = mongoose.model<IStats>('Stats', StatsSchema);
+export const Stats = models.Stats || mongoose.model<IStats>('Stats', StatsSchema);

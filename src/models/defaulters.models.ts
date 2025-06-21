@@ -1,4 +1,4 @@
-import mongoose, { Document, Schema } from 'mongoose';
+import mongoose, { Document, models, Schema } from 'mongoose';
 
 export interface IDefaulter extends Document {
     allotmentId: string;
@@ -12,4 +12,4 @@ const DefaulterSchema: Schema = new Schema({
     createdAt: { type: Date, default: Date.now },
 });
 
-export const Defaulter = mongoose.model<IDefaulter>('Defaulter', DefaulterSchema);
+export const Defaulter = models.Defaulter || mongoose.model<IDefaulter>('Defaulter', DefaulterSchema);
