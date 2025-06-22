@@ -6,7 +6,7 @@ export interface IUser extends Document {
     email: string;
     mobile: string;
     active: boolean;
-    createdAt: string;
+    createdAt: Date;
 }
 
 const UserSchema: Schema = new Schema({

@@ -1,7 +1,7 @@
 import { routeHandlerWrapper } from "@/action";
-import { Allocation } from "@/models/allocation.models";
-import { Book } from "@/models/books.models";
-import { User } from "@/models/user.models";
+import { Allocation, IAllocation } from "@/models/allocation.models";
+import { Book, IBook } from "@/models/books.models";
+import { IUser, User } from "@/models/user.models";
 
 export const POST = routeHandlerWrapper(async (request: Request) => {
     const { usercode, bookisbn } = await request.json()
@@ -10,25 +10,29 @@ export const POST = routeHandlerWrapper(async (request: Request) => {
         return new Response(JSON.stringify({ message: "User code and book ISBN are required" }), { status: 400 });
     }
 
-    const user = await User.findOne({ code: usercode });
+    const user: IUser | null = await User.findOne({ code: usercode });
 
     if (!user) {
         return new Response(JSON.stringify({ message: "User not found" }), { status: 404 });
     }
 
-    const book = await Book.findOne({ isbn: bookisbn });
+    const book: IBook | null = await Book.findOne({ isbn: bookisbn });
 
     if (!book) {
         return new Response(JSON.stringify({ message: "Book not found" }), { status: 404 });
     }
 
-    const existingAllocation = await Allocation.findOne({ usercode, bookisbn, isReturned: false });
+    const existingAllocation: IAllocation | null = await Allocation.findOne({ usercode, bookisbn, isReturned: false });
 
     if (existingAllocation) {
-        return new Response(JSON.stringify({ message: "Book is already allocated to this user" }), { status: 400 });
+        return new Response(JSON.stringify({ message: "This book is already allocated to this user" }), { status: 400 });
     }
 
-    const newAllocation = new Allocation({
+    if (book.availableNumber === 0) {
+        return new Response(JSON.stringify({ message: "Book is not available for allocation" }), { status: 400 });
+    }
+
+    const newAllocation: IAllocation = new Allocation({
         usercode,
         bookisbn,
         allotedDate: new Date(),
@@ -37,6 +41,9 @@ export const POST = routeHandlerWrapper(async (request: Request) => {
     })
 
     const savedAllocation = await newAllocation.save();
+
+    book.availableNumber -= 1;
+    await book.save();
 
     const responseData = await Allocation.aggregate([
         { $match: { _id: savedAllocation._id } },

@@ -1,12 +1,12 @@
 import { routeHandlerWrapper } from "@/action";
-import { Allocation } from "@/models/allocation.models";
+import { Allocation, IAllocation } from "@/models/allocation.models";
 
 export const GET = routeHandlerWrapper(async (request: Request) => {
     const page = parseInt(new URLSearchParams(new URL(request.url).search).get("page") || "1", 10);
     const limit = parseInt(new URLSearchParams(new URL(request.url).search).get("limit") || "10", 10);
     const skip = (page - 1) * limit;
 
-    const allocations = await Allocation.aggregate([
+    const allocations: IAllocation[] = await Allocation.aggregate([
         {
             $lookup: {
                 from: "users",
@@ -43,7 +43,7 @@ export const GET = routeHandlerWrapper(async (request: Request) => {
             }
         },
         {
-            $sort: { createdAt: -1 } // Sort by creation date in descending order
+            $sort: { createdAt: -1 }
         }
     ]);
 

@@ -1,17 +1,17 @@
 import { routeHandlerWrapper } from "@/action";
-import { Allocation } from "@/models/allocation.models";
+import { Allocation, IAllocation } from "@/models/allocation.models";
 
 export const GET = routeHandlerWrapper(async () => {
-    const result = await Allocation.aggregate([
+    const result: IAllocation[] = await Allocation.aggregate([
         {
             $match: {
                 isReturned: false,
-                submissionDate: { $lt: new Date() } // submissionDate has already passed
+                submissionDate: { $lt: new Date() }
             }
         },
         {
             $lookup: {
-                from: "users", // adjust if collection name differs
+                from: "users",
                 localField: "usercode",
                 foreignField: "code",
                 as: "user"
@@ -20,7 +20,7 @@ export const GET = routeHandlerWrapper(async () => {
         { $unwind: "$user" },
         {
             $lookup: {
-                from: "books", // adjust if collection name differs
+                from: "books",
                 localField: "bookisbn",
                 foreignField: "isbn",
                 as: "book"

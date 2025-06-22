@@ -1,8 +1,8 @@
 import { routeHandlerWrapper } from "@/action";
-import { Allocation } from "@/models/allocation.models";
+import { Allocation, IAllocation } from "@/models/allocation.models";
 
 export const GET = routeHandlerWrapper(async () => {
-    const result = await Allocation.aggregate([
+    const result: IAllocation[] = await Allocation.aggregate([
         {
             $addFields: {
                 daysLeft: {
@@ -18,7 +18,7 @@ export const GET = routeHandlerWrapper(async () => {
         {
             $match: {
                 isReturned: false,
-                daysLeft: { $lte: 5, $gte: 0 } // Only upcoming within 5 days and not overdue
+                daysLeft: { $lte: 5, $gte: 0 }
             }
         },
         {

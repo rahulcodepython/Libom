@@ -1,12 +1,12 @@
 import { routeHandlerWrapper } from "@/action";
-import { Income } from "@/models/income.models";
+import { IIncome, Income } from "@/models/income.models";
 
 export const GET = routeHandlerWrapper(async (request: Request) => {
     const page = parseInt(new URLSearchParams(new URL(request.url).search).get("page") || "1", 10);
     const limit = parseInt(new URLSearchParams(new URL(request.url).search).get("limit") || "10", 10);
     const skip = (page - 1) * limit;
 
-    const incomes = await Income.find({}, { __v: 0 })
+    const incomes: IIncome[] = await Income.find({}, { __v: 0 })
         .sort({ createdAt: -1 })
 
     const filteredIncomes = incomes.slice(skip, skip + limit);
@@ -25,7 +25,7 @@ export const GET = routeHandlerWrapper(async (request: Request) => {
 
 export const POST = routeHandlerWrapper(async (request: Request) => {
     const { amount, reason, createdAt } = await request.json();
-    const income = new Income({ amount, reason, createdAt });
+    const income: IIncome = new Income({ amount, reason, createdAt });
     await income.save();
 
     return new Response(JSON.stringify({

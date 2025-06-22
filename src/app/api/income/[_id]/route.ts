@@ -1,12 +1,12 @@
 import { routeHandlerWrapper } from "@/action";
-import { Income } from "@/models/income.models";
+import { IIncome, Income } from "@/models/income.models";
 
 export const PATCH = routeHandlerWrapper(async (request: Request, params: { _id: string }) => {
     const { _id } = params;
 
     const incomeData = await request.json();
 
-    const income = await Income.findByIdAndUpdate(_id, incomeData, {
+    const income: IIncome | null = await Income.findByIdAndUpdate(_id, incomeData, {
         new: true
     });
 
@@ -38,7 +38,7 @@ export const PATCH = routeHandlerWrapper(async (request: Request, params: { _id:
 export const DELETE = routeHandlerWrapper(async (request: Request, params: { _id: string }) => {
     const { _id } = params;
 
-    const income = await Income.findByIdAndDelete(_id);
+    const income: IIncome | null = await Income.findByIdAndDelete(_id);
 
     if (!income) {
         return new Response(JSON.stringify({

@@ -1,5 +1,5 @@
 import { routeHandlerWrapper } from "@/action";
-import { Book } from "@/models/books.models";
+import { Book, IBook } from "@/models/books.models";
 
 export const DELETE = routeHandlerWrapper(async (request: Request, params: { _id: string }) => {
     const { _id } = params;
@@ -13,7 +13,7 @@ export const DELETE = routeHandlerWrapper(async (request: Request, params: { _id
         });
     }
 
-    const deletedBook = await Book.findByIdAndDelete(_id);
+    const deletedBook: IBook | null = await Book.findByIdAndDelete(_id);
 
     if (!deletedBook) {
         return new Response(JSON.stringify({ message: "Book not found" }), {

@@ -1,6 +1,6 @@
 import { Document, model, models, Schema } from 'mongoose';
 
-interface IAllocation extends Document {
+export interface IAllocation extends Document {
     usercode: string;
     bookisbn: string;
     allotedDate: Date;

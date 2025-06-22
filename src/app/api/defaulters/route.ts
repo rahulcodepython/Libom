@@ -1,16 +1,13 @@
 import { routeHandlerWrapper } from "@/action";
-import { Defaulter } from "@/models/defaulters.models";
+import { Defaulter, IDefaulter } from "@/models/defaulters.models";
 
 export const GET = routeHandlerWrapper(async () => {
-    const result = await Defaulter.aggregate([
-        // STEP 1: Convert allotmentId string to ObjectId
+    const result: IDefaulter[] = await Defaulter.aggregate([
         {
             $addFields: {
                 allotmentObjectId: { $toObjectId: "$allotmentId" }
             }
         },
-
-        // STEP 2: Lookup into Allocation using ObjectId
         {
             $lookup: {
                 from: "allocations",
@@ -19,13 +16,9 @@ export const GET = routeHandlerWrapper(async () => {
                 as: "allocation"
             }
         },
-
-        // STEP 3: Unwind to flatten single allocation object
         {
             $unwind: "$allocation"
         },
-
-        // STEP 4: Lookup User
         {
             $lookup: {
                 from: "users",
@@ -35,8 +28,6 @@ export const GET = routeHandlerWrapper(async () => {
             }
         },
         { $unwind: "$user" },
-
-        // STEP 5: Lookup Book
         {
             $lookup: {
                 from: "books",
@@ -46,8 +37,6 @@ export const GET = routeHandlerWrapper(async () => {
             }
         },
         { $unwind: "$book" },
-
-        // STEP 6: Project final fields
         {
             $project: {
                 _id: 1,

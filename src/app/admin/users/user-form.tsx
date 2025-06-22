@@ -22,20 +22,20 @@ const UserForm = ({
     onSubmit: (data: UserType) => void
 }) => {
     const [isDialogOpen, setIsDialogOpen] = React.useState(false)
-    const [formData, setFormData] = React.useState(edit && data ? data : {
+    const [formData, setFormData] = React.useState<UserType>({
         _id: '',
         code: '',
         name: '',
         email: '',
         mobile: '',
         active: true,
-        createdAt: new Date().toISOString(),
+        createdAt: new Date(), // Ensure createdAt is always a string
     })
 
     const { isLoading, callApi } = useApiHandler()
 
     const handleSubmit = async () => {
-        const responseData = await callApi(() => edit ? editUsers(formData as UserType) : createUsers(formData as UserType), () => {
+        const responseData = await callApi(() => edit ? editUsers(formData) : createUsers(formData), () => {
             !edit && setFormData({
                 _id: '',
                 code: '',
@@ -43,7 +43,7 @@ const UserForm = ({
                 email: '',
                 mobile: '',
                 active: true,
-                createdAt: new Date().toISOString(),
+                createdAt: new Date(), // Ensure createdAt is always a string
             })
         })
 

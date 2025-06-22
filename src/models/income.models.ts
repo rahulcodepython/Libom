@@ -1,6 +1,6 @@
 import mongoose, { Document, models, Schema } from 'mongoose';
 
-export interface Income extends Document {
+export interface IIncome extends Document {
     amount: number;
     reason: string;
     createdAt: Date;
@@ -12,4 +12,4 @@ const IncomeSchema: Schema = new Schema({
     createdAt: { type: Date, default: Date.now },
 });
 
-export const Income = models.Income || mongoose.model<Income>('Income', IncomeSchema);
+export const Income = models.Income || mongoose.model<IIncome>('Income', IncomeSchema);

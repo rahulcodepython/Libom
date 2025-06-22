@@ -1,5 +1,5 @@
 import { routeHandlerWrapper } from "@/action";
-import { User } from "@/models/user.models";
+import { IUser, User } from "@/models/user.models";
 
 export const DELETE = routeHandlerWrapper(async (request: Request, params: { _id: string }) => {
     const userId = params._id;
@@ -13,7 +13,7 @@ export const DELETE = routeHandlerWrapper(async (request: Request, params: { _id
         });
     }
 
-    const user = await User.findByIdAndDelete(userId);
+    const user: IUser | null = await User.findByIdAndDelete(userId);
 
     if (!user) {
         return new Response(JSON.stringify({ message: "User not found" }), {
