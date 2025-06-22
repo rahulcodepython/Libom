@@ -1,9 +1,18 @@
 "use client"
 
+import submitBookWithPenalty from '@/api/penalty.book.api'
 import submitBook from '@/api/submit.book.api'
 import LoadingButton from '@/components/loading-button'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { useApiHandler } from '@/hooks/useApiHandler'
@@ -150,18 +159,84 @@ const SubmissionsRecordSingle = ({ allocation, handleRemoveResult }: {
                 )}
             </TableCell>
             <TableCell>
-                <LoadingButton isLoading={isLoading}>
-                    <Button
-                        variant="outline"
-                        size="sm"
-                        disabled={allocation.isReturned || isLoading}
-                        onClick={handleReturnBook}
-                    >
-                        Return Book
-                    </Button>
-                </LoadingButton>
+                {
+                    isOverdue ? (
+                        <PenaltyDialog allocation={allocation} handleRemoveResult={handleRemoveResult} />
+                    ) : (
+                        <LoadingButton isLoading={isLoading}>
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                disabled={allocation.isReturned || isLoading}
+                                onClick={handleReturnBook}
+                            >
+                                Return Book
+                            </Button>
+                        </LoadingButton>
+                    )
+                }
             </TableCell>
         </TableRow>
+    )
+}
+
+const PenaltyDialog = ({ allocation, handleRemoveResult }: { allocation: AllocationRecordType, handleRemoveResult: (allocationId: string) => void }) => {
+    const [isOpen, setIsOpen] = useState(false)
+    const [amount, setAmount] = useState(0)
+    const { isLoading, callApi } = useApiHandler()
+
+    const handleSubmit = async () => {
+        if (amount <= 0) {
+            toast.error("Please enter a valid penalty amount")
+            return
+        }
+
+        const responseData = await callApi(() => submitBookWithPenalty(allocation._id, amount), () => {
+            setIsOpen(false)
+            setAmount(0)
+            handleRemoveResult(allocation._id)
+        })
+
+        if (responseData) {
+            toast.success(responseData.message || "Book returned successfully")
+        }
+    }
+
+    return (
+        <Dialog open={isOpen} onOpenChange={setIsOpen}>
+            <DialogTrigger asChild>
+                <Button
+                    variant="outline"
+                    size="sm"
+                    disabled={allocation.isReturned || isLoading}
+                >
+                    Return Book
+                </Button>
+            </DialogTrigger>
+            <DialogContent>
+                <DialogHeader>
+                    <DialogTitle>Add Penalty Amount (In Rupees)</DialogTitle>
+                    <DialogDescription>
+                        <Input
+                            type="number"
+                            defaultValue={1}
+                            min={1}
+                            placeholder="Enter penalty amount"
+                            value={amount}
+                            onChange={(e) => setAmount(Number(e.target.value))}
+                            className="mb-4"
+                        />
+                        <div className='w-full flex items-center justify-end'>
+                            <LoadingButton isLoading={isLoading}>
+                                <Button onClick={handleSubmit} disabled={isLoading || amount <= 0}>
+                                    Submit Penalty
+                                </Button>
+                            </LoadingButton>
+                        </div>
+                    </DialogDescription>
+                </DialogHeader>
+            </DialogContent>
+        </Dialog>
     )
 }
 

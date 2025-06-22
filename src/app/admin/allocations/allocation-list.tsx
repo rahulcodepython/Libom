@@ -99,6 +99,7 @@ const AllocationRecordSingle = ({ allocation }: { allocation: AllocationRecordTy
     const getDaysRemainingString = isOverdue ? `${overDueDays} days overdue` : `${diffDays} days left`;
 
     const getRowClassName = () => {
+        if (allocation.isReturned) return ""
         if (isOverdue) {
             return "bg-red-50 border-l-4 border-red-500"
         } else if (diffDays <= 3) {
@@ -117,7 +118,7 @@ const AllocationRecordSingle = ({ allocation }: { allocation: AllocationRecordTy
             <TableCell>
                 {allocation.returnedDate ? new Date(allocation.returnedDate).toLocaleDateString("en-GB") : "Not Yet Returned"}
             </TableCell>
-            <TableCell>{getDaysRemainingString}</TableCell>
+            <TableCell>{allocation.isReturned ? "Returned" : getDaysRemainingString}</TableCell>
             <TableCell>
                 {allocation.isReturned ? (
                     <span className="text-green-600">Returned</span>

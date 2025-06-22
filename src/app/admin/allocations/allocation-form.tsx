@@ -81,7 +81,9 @@ const AllocationForm = ({
                             Cancel
                         </Button>
                         <LoadingButton isLoading={isLoading}>
-                            <Button type="submit" onClick={handleSubmit}>{"Add Book"}</Button>
+                            <Button type="submit" onClick={handleSubmit}>
+                                Allocate Book
+                            </Button>
                         </LoadingButton>
                     </DialogFooter>
                 </div>
