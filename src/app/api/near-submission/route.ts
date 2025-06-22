@@ -5,22 +5,25 @@ export const GET = routeHandlerWrapper(async () => {
     const result = await Allocation.aggregate([
         {
             $addFields: {
-                daysBetween: {
-                    $divide: [
-                        { $subtract: ["$submissionDate", "$allotedDate"] },
-                        1000 * 60 * 60 * 24 // convert ms to days
-                    ]
+                daysLeft: {
+                    $floor: {
+                        $divide: [
+                            { $subtract: ["$submissionDate", new Date()] },
+                            1000 * 60 * 60 * 24
+                        ]
+                    }
                 }
             }
         },
         {
             $match: {
-                daysBetween: { $lte: 5 }
+                isReturned: false,
+                daysLeft: { $lte: 5, $gte: 0 } // Only upcoming within 5 days and not overdue
             }
         },
         {
             $lookup: {
-                from: "users", // ensure this matches the actual collection name
+                from: "users",
                 localField: "usercode",
                 foreignField: "code",
                 as: "user"
@@ -29,7 +32,7 @@ export const GET = routeHandlerWrapper(async () => {
         { $unwind: "$user" },
         {
             $lookup: {
-                from: "books", // ensure this matches the actual collection name
+                from: "books",
                 localField: "bookisbn",
                 foreignField: "isbn",
                 as: "book"
@@ -48,7 +51,8 @@ export const GET = routeHandlerWrapper(async () => {
                 allotedDate: 1,
                 submissionDate: 1,
                 returnedDate: 1,
-                isReturned: 1
+                isReturned: 1,
+                daysLeft: 1
             }
         }
     ]);

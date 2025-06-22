@@ -135,7 +135,6 @@ export default async function OverduePage() {
                                 <TableHead>Book Title</TableHead>
                                 <TableHead>Due Date</TableHead>
                                 <TableHead>Days Overdue</TableHead>
-                                <TableHead>Actions</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -153,10 +152,9 @@ export default async function OverduePage() {
 }
 
 const Record = ({ submission }: { submission: RecordType }) => {
-    const allotedDate = new Date(submission.allotedDate)
     const submissionDate = new Date(submission.submissionDate)
 
-    const daysOverdue = Math.ceil((Date.now() - submissionDate.getTime()) / (1000 * 60 * 60 * 24))
+    const daysOverdue = Math.floor((Date.now() - submissionDate.getTime()) / (1000 * 60 * 60 * 24))
 
     return (
         <TableRow key={submission._id} className="bg-red-50 border-l-4 border-red-500">
@@ -169,8 +167,7 @@ const Record = ({ submission }: { submission: RecordType }) => {
                 </div>
             </TableCell>
             <TableCell>{submission.booktitle}</TableCell>
-            <TableCell>{new Date(submission.allotedDate).toLocaleDateString()}</TableCell>
-            <TableCell>{new Date(submission.submissionDate).toLocaleDateString()}</TableCell>
+            <TableCell>{new Date(submission.submissionDate).toLocaleDateString("en-GB")}</TableCell>
             <TableCell>
                 <span className="text-red-600 font-semibold">
                     {daysOverdue} day{daysOverdue !== 1 ? "s" : ""} overdue

@@ -96,8 +96,8 @@ const Record = ({ submission }: { submission: RecordType }) => {
             </div>
         </TableCell>
         <TableCell>{submission.booktitle}</TableCell>
-        <TableCell>{new Date(submission.allotedDate).toLocaleDateString()}</TableCell>
-        <TableCell>{new Date(submission.submissionDate).toLocaleDateString()}</TableCell>
+        <TableCell>{new Date(submission.allotedDate).toLocaleDateString("en-GB")}</TableCell>
+        <TableCell>{new Date(submission.submissionDate).toLocaleDateString("en-GB")}</TableCell>
         <TableCell>
             <span className="text-yellow-600 font-semibold">
                 {daysRemaining} day{daysRemaining !== 1 ? "s" : ""} left

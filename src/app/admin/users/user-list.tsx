@@ -94,7 +94,7 @@ const UserList = ({ data }: { data: PaginationType<UserType> }) => {
                                         <TableCell>
                                             <Badge variant={user.active ? "default" : "secondary"}>{user.active ? "Active" : "Inactive"}</Badge>
                                         </TableCell>
-                                        <TableCell>{new Date(user.createdAt).toLocaleDateString()}</TableCell>
+                                        <TableCell>{new Date(user.createdAt).toLocaleDateString("en-GB")}</TableCell>
                                         <TableCell>
                                             <div className="flex items-center space-x-2">
                                                 <UserForm data={user} onSubmit={handleEdit} edit />

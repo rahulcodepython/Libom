@@ -91,17 +91,19 @@ const AllocationList = ({ data }: { data: PaginationType<AllocationRecordType> }
 }
 
 const AllocationRecordSingle = ({ allocation }: { allocation: AllocationRecordType }) => {
-    const diffDays = Math.ceil((new Date(allocation.submissionDate).getTime() - new Date(allocation.allotedDate).getTime()) / (1000 * 60 * 60 * 24));
+    const diffDays = Math.floor((new Date(allocation.submissionDate).getTime() - new Date(allocation.allotedDate).getTime()) / (1000 * 60 * 60 * 24));
 
-    const getDaysRemainingString = diffDays > 0 ? `${diffDays} days left` : `${Math.abs(diffDays)} days overdue`;
+    const overDueDays = Math.floor((new Date().getTime() - new Date(allocation.submissionDate).getTime()) / (1000 * 60 * 60 * 24));
+    const isOverdue = overDueDays > 0;
+
+    const getDaysRemainingString = isOverdue ? `${overDueDays} days overdue` : `${diffDays} days left`;
 
     const getRowClassName = () => {
-        if (diffDays < 0) {
+        if (isOverdue) {
             return "bg-red-50 border-l-4 border-red-500"
         } else if (diffDays <= 3) {
             return "bg-yellow-50 border-l-4 border-yellow-500"
         }
-        return ""
     }
 
     return (
@@ -110,16 +112,16 @@ const AllocationRecordSingle = ({ allocation }: { allocation: AllocationRecordTy
             <TableCell>{allocation.username}</TableCell>
             <TableCell>{allocation.bookisbn}</TableCell>
             <TableCell>{allocation.booktitle}</TableCell>
-            <TableCell>{new Date(allocation.allotedDate).toLocaleDateString()}</TableCell>
-            <TableCell>{new Date(allocation.submissionDate).toLocaleDateString()}</TableCell>
+            <TableCell>{new Date(allocation.allotedDate).toLocaleDateString("en-GB")}</TableCell>
+            <TableCell>{new Date(allocation.submissionDate).toLocaleDateString("en-GB")}</TableCell>
             <TableCell>
-                {allocation.returnedDate ? new Date(allocation.returnedDate).toLocaleDateString() : "Not Yet Returned"}
+                {allocation.returnedDate ? new Date(allocation.returnedDate).toLocaleDateString("en-GB") : "Not Yet Returned"}
             </TableCell>
             <TableCell>{getDaysRemainingString}</TableCell>
             <TableCell>
                 {allocation.isReturned ? (
                     <span className="text-green-600">Returned</span>
-                ) : diffDays < 0 ? (
+                ) : isOverdue ? (
                     <span className="text-red-600 font-semibold">
                         Overdue
                     </span>
