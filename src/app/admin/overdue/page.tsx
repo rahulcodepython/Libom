@@ -18,78 +18,7 @@ interface RecordType {
     booktitle: string,
 }
 
-// const mockOverdueBooks: OverdueBook[] = [
-//     {
-//         _id: "1",
-//         user_id: "USR003",
-//         book_id: "BK003",
-//         userName: "Bob Johnson",
-//         bookTitle: "1984",
-//         allotedDate: "2024-01-05",
-//         submissionDate: "2024-01-19",
-//         daysOverdue: 3,
-//         userPhone: "+1234567892",
-//         userEmail: "bob@example.com",
-//         fineAmount: 30,
-//     },
-//     {
-//         _id: "2",
-//         user_id: "USR009",
-//         book_id: "BK009",
-//         userName: "Sarah Wilson",
-//         bookTitle: "Brave New World",
-//         allotedDate: "2024-01-01",
-//         submissionDate: "2024-01-15",
-//         daysOverdue: 7,
-//         userPhone: "+1234567899",
-//         userEmail: "sarah@example.com",
-//         fineAmount: 70,
-//     },
-//     {
-//         _id: "3",
-//         user_id: "USR010",
-//         book_id: "BK010",
-//         userName: "Tom Davis",
-//         bookTitle: "Animal Farm",
-//         allotedDate: "2023-12-28",
-//         submissionDate: "2024-01-11",
-//         daysOverdue: 11,
-//         userPhone: "+1234567800",
-//         userEmail: "tom@example.com",
-//         fineAmount: 110,
-//     },
-//     {
-//         _id: "4",
-//         user_id: "USR011",
-//         book_id: "BK011",
-//         userName: "Lisa Brown",
-//         bookTitle: "Fahrenheit 451",
-//         allotedDate: "2023-12-25",
-//         submissionDate: "2024-01-08",
-//         daysOverdue: 14,
-//         userPhone: "+1234567801",
-//         userEmail: "lisa@example.com",
-//         fineAmount: 140,
-//     },
-// ]
-
 export default async function OverduePage() {
-    // const [overdueBooks] = useState<OverdueBook[]>(mockOverdueBooks)
-    // const [searchTerm, setSearchTerm] = useState("")
-    // const [currentPage, setCurrentPage] = useState(1)
-    // const itemsPerPage = 10
-
-    // const filteredBooks = overdueBooks.filter(
-    //     (book) =>
-    //         book.userName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    //         book.bookTitle.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    //         book.user_id.toLowerCase().includes(searchTerm.toLowerCase()),
-    // )
-
-    // const totalPages = Math.ceil(filteredBooks.length / itemsPerPage)
-    // const paginatedBooks = filteredBooks.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
-
-    // const totalFineAmount = overdueBooks.reduce((sum, book) => sum + book.fineAmount, 0)
 
     const baseurl = await getBaseUrl()
 
