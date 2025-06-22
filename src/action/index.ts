@@ -19,7 +19,7 @@ export const routeHandlerWrapper = <T extends Record<string, any>>(
     } catch (error) {
         console.error(`API Error from: ${req.url}:`, error);
         return new Response(JSON.stringify(
-            { error: "Internal Server Error" }
+            { message: "Internal Server Error" }
         ), { status: 500 });
     }
 };

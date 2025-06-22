@@ -7,7 +7,6 @@ import {
     Clock,
     DollarSign,
     LayoutDashboard,
-    LogOut,
     TrendingDown,
     TrendingUp,
     Users
@@ -18,14 +17,13 @@ import { usePathname } from "next/navigation"
 import {
     Sidebar,
     SidebarContent,
-    SidebarFooter,
     SidebarGroup,
     SidebarGroupContent,
     SidebarGroupLabel,
     SidebarHeader,
     SidebarMenu,
     SidebarMenuButton,
-    SidebarMenuItem,
+    SidebarMenuItem
 } from "@/components/ui/sidebar"
 
 const menuItems = [
@@ -71,7 +69,7 @@ const menuItems = [
     },
     {
         title: "Income Records",
-        url: "/admin/income",
+        url: "/admin/incomes",
         icon: TrendingUp,
     },
     {
@@ -114,18 +112,6 @@ export function AppSidebar() {
                     </SidebarGroupContent>
                 </SidebarGroup>
             </SidebarContent>
-            <SidebarFooter>
-                <SidebarMenu>
-                    <SidebarMenuItem>
-                        <SidebarMenuButton asChild>
-                            <Link href="/login">
-                                <LogOut />
-                                <span>Logout</span>
-                            </Link>
-                        </SidebarMenuButton>
-                    </SidebarMenuItem>
-                </SidebarMenu>
-            </SidebarFooter>
         </Sidebar>
     )
 }
