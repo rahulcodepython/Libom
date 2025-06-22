@@ -50,6 +50,11 @@ const menuItems = [
         icon: Calendar,
     },
     {
+        title: "Submissions Books",
+        url: "/admin/submissions",
+        icon: Calendar,
+    },
+    {
         title: "Near Submission",
         url: "/admin/near-submission",
         icon: Clock,
