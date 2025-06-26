@@ -8,16 +8,16 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import {
     Dialog,
     DialogContent,
-    DialogDescription,
     DialogHeader,
     DialogTitle,
-    DialogTrigger,
+    DialogTrigger
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { useApiHandler } from '@/hooks/useApiHandler'
 import usePagination, { PaginationType } from '@/hooks/usePagination'
 import { AllocationRecordType } from '@/types/allocation.type'
+import { DialogDescription } from '@radix-ui/react-dialog'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 
@@ -107,7 +107,7 @@ const SubmissionsRecordSingle = ({ allocation, handleRemoveResult }: {
     allocation: AllocationRecordType,
     handleRemoveResult: (allocationId: string) => void
 }) => {
-    const diffDays = Math.floor((new Date(allocation.submissionDate).getTime() - new Date(allocation.allotedDate).getTime()) / (1000 * 60 * 60 * 24));
+    const diffDays = Math.floor((new Date(allocation.submissionDate).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24));
 
     const overDueDays = Math.floor((new Date().getTime() - new Date(allocation.submissionDate).getTime()) / (1000 * 60 * 60 * 24));
     const isOverdue = overDueDays > 0;
@@ -182,7 +182,7 @@ const SubmissionsRecordSingle = ({ allocation, handleRemoveResult }: {
 
 const PenaltyDialog = ({ allocation, handleRemoveResult }: { allocation: AllocationRecordType, handleRemoveResult: (allocationId: string) => void }) => {
     const [isOpen, setIsOpen] = useState(false)
-    const [amount, setAmount] = useState(0)
+    const [amount, setAmount] = useState(1)
     const { isLoading, callApi } = useApiHandler()
 
     const handleSubmit = async () => {
@@ -216,24 +216,22 @@ const PenaltyDialog = ({ allocation, handleRemoveResult }: { allocation: Allocat
             <DialogContent>
                 <DialogHeader>
                     <DialogTitle>Add Penalty Amount (In Rupees)</DialogTitle>
-                    <DialogDescription>
-                        <Input
-                            type="number"
-                            defaultValue={1}
-                            min={1}
-                            placeholder="Enter penalty amount"
-                            value={amount}
-                            onChange={(e) => setAmount(Number(e.target.value))}
-                            className="mb-4"
-                        />
-                        <div className='w-full flex items-center justify-end'>
-                            <LoadingButton isLoading={isLoading}>
-                                <Button onClick={handleSubmit} disabled={isLoading || amount <= 0}>
-                                    Submit Penalty
-                                </Button>
-                            </LoadingButton>
-                        </div>
-                    </DialogDescription>
+                    <DialogDescription>Please enter the penalty amount to be charged.</DialogDescription>
+                    <Input
+                        type="number"
+                        min={1}
+                        placeholder="Enter penalty amount"
+                        value={amount}
+                        onChange={(e) => setAmount(Number(e.target.value))}
+                        className="mb-4"
+                    />
+                    <div className='w-full flex items-center justify-end'>
+                        <LoadingButton isLoading={isLoading}>
+                            <Button onClick={handleSubmit} disabled={isLoading || amount <= 0}>
+                                Submit Penalty
+                            </Button>
+                        </LoadingButton>
+                    </div>
                 </DialogHeader>
             </DialogContent>
         </Dialog>

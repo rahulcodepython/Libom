@@ -1,5 +1,6 @@
 import { routeHandlerWrapper } from "@/action";
 import { Allocation, IAllocation } from "@/models/allocation.models";
+import { Book, IBook } from "@/models/books.models";
 import { Defaulter, IDefaulter } from "@/models/defaulters.models";
 import { IIncome, Income } from "@/models/income.models";
 
@@ -31,10 +32,19 @@ export const POST = routeHandlerWrapper(async (request: Request, params: { _id: 
 
     const income: IIncome = new Income({
         amount: amount,
-        description: `Penalty for late return of book with ISBN ${allocation.bookisbn} by user with code ${allocation.usercode}`,
+        reason: `Penalty for late return of book with ISBN ${allocation.bookisbn} by user with code ${allocation.usercode}`,
         createdAt: new Date()
     });
     await income.save();
+
+    const book: IBook | null = await Book.findOne({ isbn: allocation.bookisbn });
+
+    if (!book) {
+        return new Response(JSON.stringify({ message: "Book not found" }), { status: 404 });
+    }
+
+    book.availableNumber += 1;
+    await book.save();
 
     return new Response(JSON.stringify({ message: "Book returned successfully" }), { status: 200 });
 });

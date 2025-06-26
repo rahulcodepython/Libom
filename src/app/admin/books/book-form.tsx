@@ -119,7 +119,24 @@ const BookForm = ({
                                 type="number"
                                 min={0}
                                 value={formData.totalNumber}
-                                onChange={(e) => setFormData({ ...formData, totalNumber: Number.parseInt(e.target.value) })}
+                                onChange={(e) => {
+                                    if (!edit) {
+                                        setFormData({ ...formData, totalNumber: Number.parseInt(e.target.value), availableNumber: Number.parseInt(e.target.value) })
+                                        return;
+                                    }
+                                    setFormData({ ...formData, totalNumber: Number.parseInt(e.target.value) })
+                                }}
+                                onBlur={(e) => {
+                                    if (edit && data) {
+                                        const difference = data.totalNumber - formData.totalNumber;
+                                        if (difference > 0) {
+                                            const newAvailableNumber = formData.availableNumber - difference;
+                                            setFormData({ ...formData, availableNumber: newAvailableNumber < 0 ? 0 : newAvailableNumber });
+                                        } else if (difference < 0) {
+                                            setFormData({ ...formData, availableNumber: formData.availableNumber + Math.abs(difference) });
+                                        }
+                                    }
+                                }}
                                 required
                             />
                         </div>
@@ -132,7 +149,7 @@ const BookForm = ({
                                 max={formData.totalNumber}
                                 value={formData.availableNumber}
                                 onChange={(e) => setFormData({ ...formData, availableNumber: Number.parseInt(e.target.value) })}
-                                required
+                                disabled
                             />
                         </div>
                     </div>

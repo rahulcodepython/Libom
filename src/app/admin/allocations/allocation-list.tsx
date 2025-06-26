@@ -91,7 +91,7 @@ const AllocationList = ({ data }: { data: PaginationType<AllocationRecordType> }
 }
 
 const AllocationRecordSingle = ({ allocation }: { allocation: AllocationRecordType }) => {
-    const diffDays = Math.floor((new Date(allocation.submissionDate).getTime() - new Date(allocation.allotedDate).getTime()) / (1000 * 60 * 60 * 24));
+    const diffDays = Math.floor((new Date(allocation.submissionDate).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24));
 
     const overDueDays = Math.floor((new Date().getTime() - new Date(allocation.submissionDate).getTime()) / (1000 * 60 * 60 * 24));
     const isOverdue = overDueDays > 0;
@@ -99,6 +99,7 @@ const AllocationRecordSingle = ({ allocation }: { allocation: AllocationRecordTy
     const getDaysRemainingString = isOverdue ? `${overDueDays} days overdue` : `${diffDays} days left`;
 
     const getRowClassName = () => {
+        console.log("diffDays", diffDays)
         if (allocation.isReturned) return ""
         if (isOverdue) {
             return "bg-red-50 border-l-4 border-red-500"

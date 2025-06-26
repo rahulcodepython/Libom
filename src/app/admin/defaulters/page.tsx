@@ -57,8 +57,8 @@ export default async function DefaultersPage() {
                                         <TableCell>{defaulter.username}</TableCell>
                                         <TableCell>{defaulter.bookisbn}</TableCell>
                                         <TableCell>{defaulter.booktitle}</TableCell>
-                                        <TableCell>{new Date(defaulter.allotedDate).toLocaleDateString()}</TableCell>
-                                        <TableCell>{new Date(defaulter.returnedDate).toLocaleDateString()}</TableCell>
+                                        <TableCell>{new Date(defaulter.allotedDate).toLocaleDateString("en-GB")}</TableCell>
+                                        <TableCell>{new Date(defaulter.returnedDate).toLocaleDateString("en-GB")}</TableCell>
                                         <TableCell className="font-semibold">₹{defaulter.amount}</TableCell>
                                     </TableRow>
                                 ))
